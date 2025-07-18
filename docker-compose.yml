@@ -1,0 +1,39 @@
+version: '3'
+services:
+  backend:
+    build: .
+    restart: always
+    networks:
+      - backendnet
+    # ports:
+    #   - "5000:5000"
+    expose:
+      - "5000"
+
+  autoscaler:
+    build:
+      context: .
+      dockerfile: Dockerfile.autoscaler
+    networks:
+      - backendnet
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_lb
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+    networks:
+      - backendnet
+
+networks:
+  backendnet:
+    driver: bridge
+
+
