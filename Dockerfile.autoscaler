@@ -2,6 +2,6 @@ FROM python:3.9
 WORKDIR /autoscaler
 COPY autoscaler.py .
 COPY model.pkl .
-RUN pip install requests scikit-learn
+RUN pip install requests scikit-learn pandas
 CMD ["python", "autoscaler.py"]
 EXPOSE 5000 8080 80 8000 5001
